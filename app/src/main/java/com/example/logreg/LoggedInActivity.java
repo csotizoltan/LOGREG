@@ -49,7 +49,7 @@ public class LoggedInActivity extends AppCompatActivity {
             builder.append("Üdvözöllek ").append(adatok.getString(0)).append("\n\n");
 
             tvLoggedUserName.setText(builder.toString());
-            Toast.makeText(this, "Sikeres bejelentkezés", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Sikeres bejelentkezés", Toast.LENGTH_SHORT).show();
         }
     }
 

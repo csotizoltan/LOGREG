@@ -44,7 +44,7 @@ public class DBhelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean adatRogzites(String email, String felhnev, String jelszo, String teljesnev) {
+    public boolean dataInsert(String email, String felhnev, String jelszo, String teljesnev) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_EMAIL, email);
@@ -55,9 +55,45 @@ public class DBhelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor adatLekerdezes() {
+    public Cursor dataQuery(String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(LOGREG_TABLE, new String[]{COL_EMAIL, COL_FELHNEV, COL_JELSZO, COL_TELJESNEV}, null, null,
-                null, null, null);
+
+        String WHERE = "jelszo = ?";
+        String[] whereArgs = {password};
+
+        return db.query(LOGREG_TABLE, new String[]{COL_TELJESNEV},
+                WHERE, whereArgs, null, null, null);
+    }
+
+
+    public Cursor dataQueryAllUsers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.query(LOGREG_TABLE, new String[]{COL_ID, COL_EMAIL, COL_FELHNEV, COL_JELSZO, COL_TELJESNEV},
+                null, null, null, null, null);
+    }
+
+
+    public boolean loginQuery(String felhnev, String jelszo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor login = db.rawQuery("SELECT * FROM " + LOGREG_TABLE +
+                " WHERE " + COL_FELHNEV + " = ? OR " + COL_EMAIL + " = ? AND " + COL_JELSZO + " = ?" , new String[]{felhnev, felhnev, jelszo});
+        login.moveToFirst();
+        return login.getCount() == 1;
+    }
+
+
+    public boolean usernameExists(String felhnev) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor result = db.rawQuery("SELECT * FROM felhasznalo WHERE felhnev = ?", new String[]{felhnev});
+        return result.getCount() == 1;
+    }
+
+
+    public boolean emailExists(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor result = db.rawQuery("SELECT * FROM felhasznalo WHERE email = ?", new String[]{email});
+        return result.getCount() == 1;
     }
 }

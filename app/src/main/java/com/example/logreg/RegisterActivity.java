@@ -1,13 +1,20 @@
 package com.example.logreg;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -23,13 +30,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         init();
 
+
         btnRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Registration();
             }
         });
-
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,45 +51,44 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void Registration() {
         String email = etRegistrationEmail.getText().toString().trim();
-        String felhnev = etRegistrationUserName.getText().toString().trim();
-        String jelszo = etRegistrationUserName.getText().toString().trim();
-        String teljesnev = etRegistrationUserName.getText().toString().trim();
+        String username = etRegistrationUserName.getText().toString().trim();
+        String password = etRegistrationPassword.getText().toString().trim();
+        String name = etRegistrationFullName.getText().toString().trim();
 
         if (email.isEmpty()) {
-            Toast.makeText(this, "Az E-mail cím megadása kötelező", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Az E-mail cím megadása kötelező!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (felhnev.isEmpty()) {
-            Toast.makeText(this, "A felhasználónév megadása kötelező", Toast.LENGTH_SHORT).show();
+        if (username.isEmpty()) {
+            Toast.makeText(this, "A felhasználónév megadása kötelező!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (jelszo.isEmpty()) {
-            Toast.makeText(this, "A jelszó megadása kötelező", Toast.LENGTH_SHORT).show();
+        if (password.isEmpty()) {
+            Toast.makeText(this, "A jelszó megadása kötelező!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (teljesnev.isEmpty()) {
-            Toast.makeText(this, "A teljes neved megadása kötelező", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty()) {
+            Toast.makeText(this, "A teljes neved megadása kötelező!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (adatbazis.adatRogzites(email, felhnev, jelszo, teljesnev)) {
-            Toast.makeText(this, "Sikeres rögzítés", Toast.LENGTH_SHORT).show();
+        if (adatbazis.dataInsert(email, username, password, name)) {
+            Toast.makeText(this, "Sikeres regisztráció", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(this, "Siktelen rögzítés", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sikertelen regisztráció", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 
     private void init() {
         etRegistrationEmail = findViewById(R.id.etRegistrationEmail);
         etRegistrationUserName = findViewById(R.id.etRegistrationUserName);
-        etRegistrationUserName = findViewById(R.id.etRegistrationPassword);
-        etRegistrationUserName = findViewById(R.id.etRegistrationFullName);
+        etRegistrationPassword = findViewById(R.id.etRegistrationPassword);
+        etRegistrationFullName = findViewById(R.id.etRegistrationFullName);
         btnRegistration = findViewById(R.id.btnRegistration);
         btnBack = findViewById(R.id.btnBack);
 

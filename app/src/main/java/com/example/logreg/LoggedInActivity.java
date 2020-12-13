@@ -40,10 +40,9 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
     private void loggedIn() {
+        String userInput = MainActivity.userInput;
 
-        String password = MainActivity.password;
-
-        Cursor adatok = adatbazis.dataQuery(password);
+        Cursor adatok = adatbazis.dataQuery(userInput);
 
         StringBuilder builder = new StringBuilder();
         while (adatok.moveToNext()) {

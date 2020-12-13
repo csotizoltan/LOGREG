@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etUserName, etPassword;
     private Button btnLogin, btnRegistration;
 
-    static String password;
+    static String userInput;
 
     DBhelper adatbazis;
 
@@ -45,11 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void Login() {
-        String userName = etUserName.getText().toString().trim();
-        password = etPassword.getText().toString().trim();
+        //String userName = etUserName.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
 
-        if (userName.isEmpty()) {
-            Toast.makeText(this, "A felhasználónév megadása kötelező!", Toast.LENGTH_SHORT).show();
+        userInput = etUserName.getText().toString().trim(); // Mivel felhasználónév vagy email cím is lehet megadva
+
+        if (userInput.isEmpty()) {
+            Toast.makeText(this, "A felhasználónév vagy E-mail cím megadása kötelező!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -58,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (!adatbazis.loginQuery(userName, password)) {
+        if (!adatbazis.loginQuery(userInput, password)) {
             Toast.makeText(this, "Hibás felhasználónév vagy jelszó!", Toast.LENGTH_SHORT).show();
-            return;
         }
 
         else {

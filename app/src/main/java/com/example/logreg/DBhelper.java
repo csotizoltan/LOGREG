@@ -55,14 +55,16 @@ public class DBhelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor dataQuery(String password) {
+    public Cursor dataQuery(String userInput) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String WHERE = "jelszo = ?";
-        String[] whereArgs = {password};
+        return db.rawQuery("SELECT teljesnev FROM felhasznalo WHERE felhnev = ? OR email = ?", new String[]{userInput, userInput});
+
+        /*String WHERE = "felhnev = ? OR email = ?";
+        String[] whereArgs = {userInput, userInput};
 
         return db.query(LOGREG_TABLE, new String[]{COL_TELJESNEV},
-                WHERE, whereArgs, null, null, null);
+                WHERE, whereArgs, null, null, null);*/
     }
 
 
@@ -74,11 +76,13 @@ public class DBhelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean loginQuery(String felhnev, String jelszo) {
+    public boolean loginQuery(String userInput, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
 
+        String[] args = new String[]{userInput, password, userInput, password}; // Ebben a sorrendben vannak a ?-ek behelyettesítve
+
         Cursor login = db.rawQuery("SELECT * FROM " + LOGREG_TABLE +
-                " WHERE " + COL_FELHNEV + " = ? OR " + COL_EMAIL + " = ? AND " + COL_JELSZO + " = ?" , new String[]{felhnev, felhnev, jelszo});
+                " WHERE " + COL_FELHNEV + " = ? AND " + COL_JELSZO + " = ? OR " + COL_EMAIL + " = ? AND " + COL_JELSZO + " = ?" , args);
         login.moveToFirst();
         return login.getCount() == 1;
     }

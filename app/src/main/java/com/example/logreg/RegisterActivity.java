@@ -30,6 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         init();
 
+        focusChangeListeners();
+
 
         btnRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +51,42 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    private void focusChangeListeners() {
+
+        etRegistrationUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String username = etRegistrationUserName.getText().toString().trim();
+
+                if (!hasFocus) {
+                    if (!adatbazis.usernameExists(username)) {
+                        etRegistrationUserName.setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.usernameExists));
+                    }
+                    else {
+                        etRegistrationUserName.setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.usernameNotExists));
+                    }
+                }
+            }
+        });
+
+        etRegistrationEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String email = etRegistrationEmail.getText().toString().trim();
+
+                if (!hasFocus) {
+                    if (!adatbazis.emailExists(email)) {
+                        etRegistrationEmail.setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.usernameExists));
+                    }
+                    else {
+                        etRegistrationEmail.setTextColor(ContextCompat.getColor(RegisterActivity.this, R.color.usernameNotExists));
+                    }
+                }
+            }
+        });
+    }
+
+
     private void Registration() {
         String email = etRegistrationEmail.getText().toString().trim();
         String username = etRegistrationUserName.getText().toString().trim();
@@ -57,6 +95,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (email.isEmpty()) {
             Toast.makeText(this, "Az E-mail cím megadása kötelező!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!emailValidator(email) && !isValidEmail(email)) {
+            Toast.makeText(this, "Nem E-mail cím formátum!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -75,12 +118,42 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (!namelValidator(name)) {
+            Toast.makeText(this, "A neved nem teljes!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (adatbazis.dataInsert(email, username, password, name)) {
             Toast.makeText(this, "Sikeres regisztráció", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(this, "Sikertelen regisztráció", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    public boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+
+    public boolean emailValidator(String email) {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+
+    public boolean namelValidator(String name) {
+        Pattern pattern;
+        Matcher matcher;
+        final String NAME_PATTERN = "^[A-ZÁÉÍÓÚÖÜŐŰ][a-zA-Záéíóúöüőű]{3,30}(?: [A-ZÁÉÍÓÚÖÜŐŰ][a-zA-Záéíóúöüőű]*){1,3}$";
+        pattern = Pattern.compile(NAME_PATTERN);
+        matcher = pattern.matcher(name);
+        return matcher.matches();
     }
 
 

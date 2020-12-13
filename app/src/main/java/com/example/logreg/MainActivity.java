@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void Login() {
-        //String userName = etUserName.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
         userInput = etUserName.getText().toString().trim(); // Mivel felhasználónév vagy email cím is lehet megadva

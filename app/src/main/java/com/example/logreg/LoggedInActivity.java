@@ -26,7 +26,6 @@ public class LoggedInActivity extends AppCompatActivity {
         init();
 
         loggedIn();
-        //showAllUsers(); // --- megjeleníti az összes felhasználó összes regisztrációs adatát ---
 
         btnLogoff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,24 +50,6 @@ public class LoggedInActivity extends AppCompatActivity {
             tvLoggedUserName.setText(builder.toString());
             //Toast.makeText(this, "Sikeres bejelentkezés", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void showAllUsers() {
-        Cursor adatok = adatbazis.dataQueryAllUsers();
-
-        StringBuilder builder = new StringBuilder();
-        while (adatok.moveToNext()) {
-            builder.append("ID: ").append(adatok.getInt(0)).append("\n");
-            builder.append("E-mail: ").append(adatok.getString(1)).append("\n");
-            builder.append("Felhasználónév: ").append(adatok.getString(2)).append("\n");
-            builder.append("Jelszó: ").append(adatok.getString(3)).append("\n");
-            builder.append("Teljes név: ").append(adatok.getString(4)).append("\n\n");
-
-            tvLoggedUserName.setText(builder.toString());
-            Toast.makeText(this, "Sikeres bejelentkezés", Toast.LENGTH_SHORT).show();
-        }
-        tvLoggedUserName.setMovementMethod(new ScrollingMovementMethod());
     }
 
 
